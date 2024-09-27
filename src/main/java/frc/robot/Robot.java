@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,14 +24,18 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   Drive drive;
+  Shooter shooter;
 
   @Override
   public void robotInit() {
     drive = new Drive();
+    shooter = new Shooter();
   }
 
   @Override
   public void robotPeriodic() {
+    shooter.periodic();
+    drive.periodic();
   }
 
   @Override
@@ -47,7 +52,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive.periodic();
   }
 
   @Override

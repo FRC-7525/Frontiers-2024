@@ -11,14 +11,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-public class Drive extends SubsystemBase {
+public class Drive {
     private double maximumSpeed;
     private File swerveJsonDirectory;
     private SwerveDrive swerveDrive;
     private XboxController controller;
 
     public Drive() {
-        controller = new XboxController(1);
+        controller = new XboxController(0);
         maximumSpeed = Units.feetToMeters(12);
         try {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
