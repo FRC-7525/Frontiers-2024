@@ -10,6 +10,8 @@ import swervelib.SwerveDrive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class Drive {
     private double maximumSpeed;
@@ -23,6 +25,7 @@ public class Drive {
         try {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
             swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
+            SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
         } catch (Exception e) {
             System.out.println(e);
         }
