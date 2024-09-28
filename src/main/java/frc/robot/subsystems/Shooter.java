@@ -13,12 +13,14 @@ public class Shooter {
     }
 
     TalonFX shooterMotor;
+    TalonFX shooterMotorBottom;
     ShooterStates state;
     XboxController controller;
 
     public Shooter() {
         controller = new XboxController(0);
         shooterMotor = new TalonFX(13);
+        shooterMotorBottom = new TalonFX(14);
         shooterMotor.setInverted(true);
         state = ShooterStates.OFF;
     }
@@ -32,16 +34,19 @@ public class Shooter {
                 state = ShooterStates.INTAKING;
             }
             shooterMotor.set(0);
+            shooterMotorBottom.set(0);
         } else if (state == ShooterStates.SHOOTING) {
             if (controller.getAButtonPressed()) {
                 state = ShooterStates.OFF;
             }
             shooterMotor.set(1);
+            shooterMotorBottom.set(1);
         } else if (state == ShooterStates.INTAKING) {
             if (controller.getBButtonPressed()) {
                 state = ShooterStates.OFF;
             }
             shooterMotor.set(-0.5);
+            shooterMotorBottom.set(-0.5);
         }
     }
 }

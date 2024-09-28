@@ -26,8 +26,10 @@ public class Drive {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
             swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
             SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+            System.out.println("swerve config success");
         } catch (Exception e) {
             System.out.println(e);
+            System.out.println("womp womp womp");
         }
     }
 
