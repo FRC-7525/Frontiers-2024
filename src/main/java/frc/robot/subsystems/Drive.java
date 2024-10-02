@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
+import swervelib.math.SwerveMath;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -21,7 +22,7 @@ public class Drive {
 
     public Drive() {
         controller = new XboxController(0);
-        maximumSpeed = Units.feetToMeters(12);
+        maximumSpeed = Units.feetToMeters(16);
         try {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
             swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
