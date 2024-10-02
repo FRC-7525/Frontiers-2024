@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants;
 
 public class Shooter {
 
@@ -24,6 +26,7 @@ public class Shooter {
 
     private final double SHOOTER_CURRENT_LIMIT = 4.0;
     private final double VELOCITY_TARGET_RPS = 60.0;
+    private Timer commandTimer = new Timer();
 
     public Shooter() {
         controller = new XboxController(0);
@@ -69,5 +72,15 @@ public class Shooter {
             shooterMotor.set(-0.5);
             shooterMotorBottom.set(-0.5);
         }
+
+        if (commandTimer.get() > Constants.Shooter.SHOOT_TIME) {
+            state = ShooterStates.OFF;
+        }
+    }
+
+    public void shooting() {
+        commandTimer.reset();
+        state = ShooterStates.SHOOTING;
+        commandTimer.start();
     }
 }
