@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,13 +30,23 @@ public class Robot extends TimedRobot {
    * for any
    * initialization code.
    */
-  Drive drive;
-  Shooter shooter;
+  public Drive drive;
+  public Shooter shooter;
+
+	private SendableChooser<String> autoChooser;
+	private Command autonomousCommand;
 
   @Override
   public void robotInit() {
     drive = new Drive();
     shooter = new Shooter();
+
+    NamedCommands.registerCommand("Shooting", new Shoot(this));
+
+    autoChooser = new SendableChooser<String>();
+    autoChooser.addOption("1: Start Scource Speaker | Cross Line", "Shoot and Move");
+
+    SmartDashboard.putData("Auto autoChooser", autoChooser);
   }
 
   @Override
@@ -39,6 +56,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autonomousCommand = new PathPlannerAuto(autoChooser.getSelected());
+
+		if (autonomousCommand != null) {
+			autonomousCommand.schedule();
+		}
   }
 
   @Override
@@ -47,7 +69,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    
+    if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
   }
 
   @Override
