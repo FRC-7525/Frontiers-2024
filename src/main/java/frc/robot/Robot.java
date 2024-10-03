@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
     drive = new Drive();
     shooter = new Shooter();
 
+    CameraServer.startAutomaticCapture();
     NamedCommands.registerCommand("Shooting", new Shoot(this));
 
     autoChooser = new SendableChooser<String>();

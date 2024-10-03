@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
-import swervelib.math.SwerveMath;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,7 +21,6 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
-    private double maximumSpeed;
     private File swerveJsonDirectory;
     private SwerveDrive swerveDrive;
     private XboxController controller;
@@ -41,6 +38,8 @@ public class Drive extends SubsystemBase {
     // Rotates toooo fast
     private final double rotaitonMultiplier = 0.5;
 
+    private boolean fieldRelative = false;
+
 
     public Drive() {
         try {
@@ -50,17 +49,24 @@ public class Drive extends SubsystemBase {
             System.out.println("swerve config success");
         } catch (Exception e) {
             System.out.println(e);
-            System.out.println("womp womp womp");
         }
 
 		pathPlannerInit();
 	}
 
     public void periodic() {
+        if (controller.getStartButtonPressed()) {
+            fieldRelative = !fieldRelative;
+        }
+
+        if (controller.getBackButtonPressed()) {
+            swerveDrive.zeroGyro();
+        }
+
         double xMovement = MathUtil.applyDeadband(controller.getLeftY(), 0.1);
         double rotation = MathUtil.applyDeadband(controller.getRightX(), 0.1);
         double yMovement = MathUtil.applyDeadband(controller.getLeftX(), 0.1);
-        swerveDrive.drive(new Translation2d(xMovement * MAX_LINEAR_SPEED * translationMultiplier, yMovement * MAX_LINEAR_SPEED * translationMultiplier), rotation * MAX_ANGULAR_SPEED * rotaitonMultiplier, false, false);    
+        swerveDrive.drive(new Translation2d(xMovement * MAX_LINEAR_SPEED * translationMultiplier, yMovement * MAX_LINEAR_SPEED * translationMultiplier), rotation * MAX_ANGULAR_SPEED * rotaitonMultiplier, fieldRelative, false);    
     }
 
     public void pathPlannerInit() {
