@@ -28,12 +28,24 @@ public class Drive extends SubsystemBase {
     private SwerveDrive swerveDrive;
     private XboxController controller;
 
+    private final double MAX_LINEAR_SPEED = Units.feetToMeters(16.0);
+    private final double TRACK_WIDTH_X = Units.inchesToMeters(24.0);
+	private final double TRACK_WIDTH_Y = Units.inchesToMeters(24.0);
+	private final double DRIVE_BASE_RADIUS = Math.hypot(
+			TRACK_WIDTH_X / 2.0,
+			TRACK_WIDTH_Y / 2.0
+		);
+	private final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
+
+    private final double translationMultiplier = 1.0;
+    // Rotates toooo fast
+    private final double rotaitonMultiplier = 0.5;
+
+
     public Drive() {
-        controller = new XboxController(0);
-        maximumSpeed = Units.feetToMeters(16);
         try {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
-            swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
+            swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(MAX_LINEAR_SPEED);
             SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
             System.out.println("swerve config success");
         } catch (Exception e) {
@@ -48,7 +60,7 @@ public class Drive extends SubsystemBase {
         double xMovement = MathUtil.applyDeadband(controller.getLeftY(), 0.1);
         double rotation = MathUtil.applyDeadband(controller.getRightX(), 0.1);
         double yMovement = MathUtil.applyDeadband(controller.getLeftX(), 0.1);
-        swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, false, false);    
+        swerveDrive.drive(new Translation2d(xMovement * MAX_LINEAR_SPEED * translationMultiplier, yMovement * MAX_LINEAR_SPEED * translationMultiplier), rotation * MAX_ANGULAR_SPEED * rotaitonMultiplier, false, false);    
     }
 
     public void pathPlannerInit() {
