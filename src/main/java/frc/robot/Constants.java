@@ -12,6 +12,6 @@ public class Constants {
     }
  
     public static final class Shooter {
-      public static final double SHOOT_TIME = 1;
+      public static final double SHOOT_TIME = 2;
     }
 }
