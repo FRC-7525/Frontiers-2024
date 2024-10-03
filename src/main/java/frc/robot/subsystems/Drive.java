@@ -45,9 +45,9 @@ public class Drive extends SubsystemBase {
 	}
 
     public void periodic() {
-        double xMovement = MathUtil.applyDeadband(controller.getLeftY(), 0.5);
-        double rotation = MathUtil.applyDeadband(controller.getRightX(), 0.5);
-        double yMovement = MathUtil.applyDeadband(controller.getLeftX(), 0.5);
+        double xMovement = MathUtil.applyDeadband(controller.getLeftY(), 0.1);
+        double rotation = MathUtil.applyDeadband(controller.getRightX(), 0.1);
+        double yMovement = MathUtil.applyDeadband(controller.getLeftX(), 0.1);
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, false, false);    
     }
 
@@ -66,7 +66,7 @@ public class Drive extends SubsystemBase {
 				swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to
 				// furthest module.
 				// Replans path if vision or odo detects errors (S tier)
-				new ReplanningConfig(true, true) // Default path replanning config. See the API for the options
+				new ReplanningConfig(false, false) // Default path replanning config. See the API for the options
 				// here
 			),
 			() -> {

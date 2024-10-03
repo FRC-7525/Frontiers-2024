@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     NamedCommands.registerCommand("Shooting", autoCommands.shooting());
 
     autoChooser = new SendableChooser<String>();
-    autoChooser.addOption("0: Start at Speaker | Cross Line", "Shoot and Move");
+    autoChooser.addOption("1: Start Scource Speaker | Cross Line", "Shoot and Move");
 
     SmartDashboard.putData("Auto autoChooser", autoChooser);
   }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3826715309960145,
-      "y": 5.580559282764361
+      "x": 0.8338753339418218,
+      "y": 4.391563704668065
     },
-    "rotation": 0
+    "rotation": -61.92751306414701
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Cross Line Path"
+            "pathName": "Example Path"
           }
         }
       ]
