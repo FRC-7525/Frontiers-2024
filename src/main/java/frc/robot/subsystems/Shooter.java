@@ -2,7 +2,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants;
 
 public class Shooter {
 
@@ -21,9 +24,11 @@ public class Shooter {
     // TODO: Test, disable if not working
     private final boolean CURRENT_SENSING_ON = true;
     private final boolean AUTOMATIC_SPEED_TRANSITION = true;  
+    private boolean finishedShooting = false;
 
     private final double SHOOTER_CURRENT_LIMIT = 4.0;
     private final double VELOCITY_TARGET_RPS = 60.0;
+    private Timer commandTimer = new Timer();
 
     public Shooter() {
         controller = new XboxController(0);
@@ -56,6 +61,13 @@ public class Shooter {
             if (controller.getAButtonPressed()) {
                 state = ShooterStates.OFF;
             }
+            if (DriverStation.isAutonomous()) {
+                commandTimer.start();
+                if (commandTimer.get() > Constants.Shooter.SHOOT_TIME) {
+                    state = ShooterStates.OFF;
+                    finishedShooting = true;
+                }
+            }
             shooterMotor.set(1);
             shooterMotorBottom.set(1);
         } else if (state == ShooterStates.INTAKING) {
@@ -69,5 +81,20 @@ public class Shooter {
             shooterMotor.set(-0.5);
             shooterMotorBottom.set(-0.5);
         }
+
+        if (commandTimer.get() > Constants.Shooter.SHOOT_TIME) {
+            state = ShooterStates.OFF;
+        }
+    }
+
+    public void shooting() {
+        // commandTimer.reset();
+        finishedShooting = false;
+        state = ShooterStates.SPINNING_UP;
+        // commandTimer.start();
+    }
+
+    public boolean finishedShooting() {
+        return finishedShooting;
     }
 }
