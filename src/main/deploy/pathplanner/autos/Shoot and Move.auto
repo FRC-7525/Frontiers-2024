@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8338753339418218,
+      "y": 4.391563704668065
+    },
+    "rotation": -61.92751306414701
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Example Path"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
