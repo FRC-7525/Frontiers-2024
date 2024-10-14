@@ -34,14 +34,16 @@ public class Drive extends SubsystemBase {
 		);
 	private final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
-    private final double translationMultiplier = 1.0;
+    private double translationMultiplier = 1.0;
     // Rotates toooo fast
-    private final double rotaitonMultiplier = 0.5;
+    private double rotationMultiplier = 5;
 
     private boolean fieldRelative = false;
 
 
     public Drive() {
+		controller = new XboxController(0);
+
         try {
             swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
             swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(MAX_LINEAR_SPEED);
@@ -63,10 +65,22 @@ public class Drive extends SubsystemBase {
             swerveDrive.zeroGyro();
         }
 
+		if (controller.getRightTriggerAxis() >= 0.8) {
+			translationMultiplier = 0.5;
+		} else {
+			translationMultiplier = 1;
+		}
+
+		if (controller.getLeftTriggerAxis() >= 0.8) {
+			rotationMultiplier = 2.5;
+		} else {
+			rotationMultiplier = 5;
+		}
+
         double xMovement = MathUtil.applyDeadband(controller.getLeftY(), 0.1);
         double rotation = MathUtil.applyDeadband(controller.getRightX(), 0.1);
         double yMovement = MathUtil.applyDeadband(controller.getLeftX(), 0.1);
-        swerveDrive.drive(new Translation2d(xMovement * MAX_LINEAR_SPEED * translationMultiplier, yMovement * MAX_LINEAR_SPEED * translationMultiplier), rotation * MAX_ANGULAR_SPEED * rotaitonMultiplier, fieldRelative, false);    
+        swerveDrive.drive(new Translation2d(xMovement * MAX_LINEAR_SPEED * translationMultiplier, yMovement * MAX_LINEAR_SPEED * translationMultiplier), rotation * MAX_ANGULAR_SPEED * rotationMultiplier, fieldRelative, false);    
     }
 
     public void pathPlannerInit() {
